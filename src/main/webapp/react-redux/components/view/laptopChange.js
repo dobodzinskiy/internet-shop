@@ -1,0 +1,147 @@
+var React = require('react');
+var $ = require('jquery');
+var { Image, Button } = require('react-bootstrap');
+var { hashHistory } = require('react-router');
+
+const ProductChangePanel = React.createClass({
+    handleChangeProduct: function (e) {
+        e.preventDefault();
+        if (confirm("Change this product?")) {
+            var product = this.props.product;
+            var newKeyboardLight;
+            switch ($("#keyboardLight").val()) {
+                case '1' :
+                    newKeyboardLight = true;
+                    break;
+                case '0' :
+                    newKeyboardLight = false;
+                    break;
+            }
+            this.props.changeProduct({
+                id: product.id,
+                name: $("#name").val(),
+                photo: product.photo,
+                price: $("#price").val(),
+                model: $("#model").val(),
+                type: product.type,
+                available: product.available,
+                size: $("#size").val(),
+                weight: $("#weight").val(),
+                storage: $("#storage").val(),
+                ram: $("#ram").val(),
+                screen: $("#screen").val(),
+                os: $("#os").val(),
+                color: $("#color").val(),
+                company: $("#company").val(),
+                processor: $("#processor").val(),
+                description: $("#description").val(),
+                keyboardLight: newKeyboardLight
+            });
+
+            var url = this.props.urlProduct;
+            hashHistory.replace(url);
+        }
+    },
+    render: function () {
+        var product = this.props.product;
+        var photoUrl = "/resources/images/" + product.photo;
+        return (
+            <div className="row">
+                <h2>
+                    <input className="form-control" type="text" defaultValue={product.name} id="name"
+                           placeholder="Product name"/>
+                </h2>
+                <div className="col-sm-8">
+                    <div className="panel panel-default">
+                        <div className="panel-heading">
+                            <input className="form-control" type="text" id="model" defaultValue={product.model}
+                                   placeholder="Product model"/>
+                        </div>
+                        <div className="panel-body">
+                            <Image src={photoUrl} responsive/>
+                            <br/>
+                            <Button bsStyle="primary"
+                                    onClick={(e) => { e.preventDefault(); }}>
+                                New photo
+                            </Button> &nbsp;
+                            <Button bsStyle="default" onClick={this.handleChangeProduct}>Save</Button> &nbsp;
+                            <div className="col-sm-4">
+                                <input className="form-control" type="text" id="price" defaultValue={product.price}
+                                       placeholder="Product price"/>
+                            </div>
+                            <br/>
+                            <br/>
+                            <h3>Description</h3>
+                            <h5><textarea className="form-control" rows="5" id="description"
+                                          defaultValue={product.description}/></h5>
+                        </div>
+                    </div>
+                </div>
+                <div className="col-sm-4" height="500px;">
+                    <div className="panel panel-default">
+                        <div className="panel-heading">Details</div>
+                        <table className="table table-hover">
+                            <tbody>
+                            <tr>
+                                <td><b>Company</b></td>
+                                <td><input className="form-control" id="company" defaultValue={product.company}/></td>
+                            </tr>
+                            <tr>
+                                <td><b>Weight</b></td>
+                                <td><input className="form-control" id="weight" defaultValue={product.weight}/></td>
+                            </tr>
+                            <tr>
+                                <td><b>Size</b></td>
+                                <td><input className="form-control" id="size" defaultValue={product.size}/></td>
+                            </tr>
+                            <tr>
+                                <td><b>Storage</b></td>
+                                <td><input className="form-control" id="storage" defaultValue={product.storage}/></td>
+                            </tr>
+                            <tr>
+                                <td><b>RAM</b></td>
+                                <td><input className="form-control" id="ram" defaultValue={product.ram}/></td>
+                            </tr>
+                            <tr>
+                                <td><b>Screen</b></td>
+                                <td><input className="form-control" id="screen" defaultValue={product.screen}/></td>
+                            </tr>
+                            <tr>
+                                <td><b>OS</b></td>
+                                <td><input className="form-control" id="os" defaultValue={product.os}/></td>
+                            </tr>
+                            <tr>
+                                <td><b>Color</b></td>
+                                <td><input className="form-control" id="color" defaultValue={product.color}/></td>
+                            </tr>
+                            <tr>
+                                <td><b>Processor</b></td>
+                                <td><input className="form-control" id="processor" defaultValue={product.processor}/>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td><b>Keyboard light</b></td>
+                                <td>
+                                    <select className="form-control" id="keyboardLight">
+                                        <option value="1">+</option>
+                                        <option value="0">-</option>
+                                    </select>
+                                </td>
+                            </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        )
+    }
+});
+
+module.exports = function (props) {
+    return (
+        <div className="container">
+            <ProductChangePanel urlProduct={props.urlProduct} product={props.product}
+                                changeProduct={props.changeProduct}/>
+        </div>
+    )
+};
