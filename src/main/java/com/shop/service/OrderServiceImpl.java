@@ -9,47 +9,52 @@ import com.shop.entity.Order;
 import com.shop.entity.OrderState;
 import com.shop.entity.Product;
 import com.shop.mapper.OrderMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
-import java.util.Set;
-
 
 @Service("orderService")
+@Transactional
 public class OrderServiceImpl implements OrderService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(OrderServiceImpl.class);
 
     @Autowired
     private OrderDao orderDao;
+
     @Autowired
     private ProductDao productDao;
-    @Autowired
-    private OrderMapper orderMapper;
+
     @Autowired
     private UserDao userDao;
+
+    @Autowired
+    private OrderMapper orderMapper;
+
     @Autowired
     private MailService mailService;
 
     @Override
-    public OrderDto getOrder(int id) {
-        return orderMapper.toDto(orderDao.getOrder(id));
-    }
-
-    @Override
+    @Transactional(readOnly = true)
     public List<OrderDto> getOrdersList() {
         List<Order> orders = orderDao.getOrdersList();
         return orderMapper.toDtoList(orders);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderDto> getOrders(String userLogin) {
         List<Order> orders = orderDao.getOrders(userLogin);
         return orderMapper.toDtoList(orders);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<OrderDto> getOrders(int id) {
         return orderMapper.toDtoList(orderDao.getOrders(id));
     }
@@ -57,33 +62,25 @@ public class OrderServiceImpl implements OrderService {
     @Override
     public OrderDto confirmOrder(OrderDto orderDto) {
         Order order = orderMapper.fromDto(orderDto);
-
         List<Product> products = new ArrayList<>();
-        for(ProductDto productDto : orderDto.getProducts()) {
+
+        for (ProductDto productDto : orderDto.getProducts()) {
             products.add(productDao.getProduct(productDto.getId()));
         }
+
         order.setProducts(products);
-
         order.setUser(userDao.findByUserLogin(orderDto.getUsername()));
-        order.setOrderState(OrderState.ACCEPTED);
-        order.setDate(new Date(System.currentTimeMillis()));
-
 
         orderDao.confirmOrder(order);
         mailService.orderConfirmMail(order);
-
         return orderMapper.toDto(order);
-    }
-
-    @Override
-    public void updateOrder(OrderDto orderDto) {
-        orderDao.updateOrder(orderMapper.fromDto(orderDto));
     }
 
     @Override
     public OrderDto changeStatus(int id) {
         Order order = orderDao.getOrder(id);
-        switch(order.getOrderState()) {
+
+        switch (order.getOrderState()) {
             case ACCEPTED:
                 order.setOrderState(OrderState.IN_PROGRESS);
                 break;
@@ -93,8 +90,12 @@ public class OrderServiceImpl implements OrderService {
             case SHIPPED:
                 order.setOrderState(OrderState.DELIVERED);
                 break;
-            default: break;
+            default:
+                String message = "Order state is undefined";
+                LOGGER.error(message);
+                throw new IllegalArgumentException(message);
         }
+
         orderDao.updateOrder(order);
         return orderMapper.toDto(order);
     }

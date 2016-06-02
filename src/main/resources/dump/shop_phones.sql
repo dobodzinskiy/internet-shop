@@ -38,7 +38,7 @@ CREATE TABLE `phones` (
 
 LOCK TABLES `phones` WRITE;
 /*!40000 ALTER TABLE `phones` DISABLE KEYS */;
-INSERT INTO `phones` VALUES (1,0,'Nano-Sim','SMS, MMS'),(4,0,'Nano','SMS, MMS'),(5,1,'Nano','SMS, MMs'),(6,1,'Nano','SMS, MMS'),(12,0,'Nano','SMS, MMS');
+INSERT INTO `phones` VALUES (1,1,'Nano-Sim','SMS, MMS'),(4,1,'Nano','SMS, MMS'),(5,1,'Nano','SMS, MMs'),(6,1,'Nano','SMS, MMS');
 /*!40000 ALTER TABLE `phones` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-11 23:43:06
+-- Dump completed on 2016-06-02 17:55:25

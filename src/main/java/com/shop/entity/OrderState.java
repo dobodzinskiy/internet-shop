@@ -1,12 +1,10 @@
 package com.shop.entity;
 
-/**
- * Created by dobodzinskiy on 30.03.2016.
- */
 public enum OrderState {
+
     ACCEPTED("Accepted"),
-    IN_PROGRESS("InProgress"),
-    SHIPPED("SHIPPED"),
+    IN_PROGRESS("In progress"),
+    SHIPPED("Shipped"),
     DELIVERED("Delivered");
 
     private String value;
@@ -19,8 +17,12 @@ public enum OrderState {
         return value;
     }
 
-    @Override
-    public String toString() {
-        return this.getValue();
+    public static OrderState getEnum(String value) {
+        for (OrderState v : values())
+            if (v.getValue().equalsIgnoreCase(value)) {
+                return v;
+            }
+
+        throw new IllegalArgumentException(String.format("Cannot convert '%s' value to enum", value));
     }
 }

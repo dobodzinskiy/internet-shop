@@ -1,41 +1,53 @@
 package com.shop.service;
 
 import com.shop.dao.ProductDao;
-import com.shop.dao.UserDao;
 import com.shop.dto.ComputerDto;
 import com.shop.dto.LaptopDto;
 import com.shop.dto.PhoneDto;
-import com.shop.dto.ProductDto;
-import com.shop.entity.*;
-import com.shop.mapper.*;
+import com.shop.entity.Computer;
+import com.shop.entity.Laptop;
+import com.shop.entity.Phone;
+import com.shop.entity.ProductType;
+import com.shop.entity.SortType;
+import com.shop.mapper.ComputerMapper;
+import com.shop.mapper.LaptopMapper;
+import com.shop.mapper.PhoneMapper;
+import com.shop.mapper.ProductMapper;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 
 @Service("productService")
+@Transactional
 public class ProductServiceImpl implements ProductService {
+
+    private static final Logger LOGGER = LoggerFactory.getLogger(ProductServiceImpl.class);
 
     @Autowired
     private ProductDao productDao;
-    @Autowired
-    private UserDao userDao;
+
     @Autowired
     private ProductMapper productMapper;
-    @Autowired
-    private CommentMapper commentMapper;
+
     @Autowired
     private PhoneMapper phoneMapper;
+
     @Autowired
     private LaptopMapper laptopMapper;
+
     @Autowired
     private ComputerMapper computerMapper;
-    @Value("${pagination.productsPerPage}")
-    private Integer ProductsPerPage;
-    @Value("${products.topProducts}")
-    private Integer topProductsCount;
 
+    @Value("${pagination.productsPerPage}")
+    private Integer productsPerPage;
+
+    @Override
+    @Transactional(readOnly = true)
     public ProductType defineProductType(int id) {
         return productDao.getProduct(id).getType();
     }
@@ -62,56 +74,35 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
-    public List<PhoneDto> getPhones() {
-        return phoneMapper.toDtoList(productDao.getPhones());
+    @Transactional(readOnly = true)
+    public List<PhoneDto> getPhones(int page, String sortType) {
+        int productNumber = (page - 1) * productsPerPage;
+        return phoneMapper.toDtoList(productDao.getPhones(productNumber, SortType.getEnum(sortType)));
     }
 
     @Override
-    public List<LaptopDto> getLaptops() {
-        return laptopMapper.toDtoList(productDao.getLaptops());
+    @Transactional(readOnly = true)
+    public List<LaptopDto> getLaptops(int page, String sortType) {
+        int productNumber = (page - 1) * productsPerPage;
+        return laptopMapper.toDtoList(productDao.getLaptops(productNumber, SortType.getEnum(sortType)));
     }
 
     @Override
-    public List<ComputerDto> getComputers() {
-        return computerMapper.toDtoList(productDao.getComputers());
+    @Transactional(readOnly = true)
+    public List<ComputerDto> getComputers(int page, String sortType) {
+        int productNumber = (page - 1) * productsPerPage;
+        return computerMapper.toDtoList(productDao.getComputers(productNumber, SortType.getEnum(sortType)));
     }
 
     @Override
-    public List<ProductDto> getTopProducts() {
-        return productMapper.toDtoList(productDao.getTopProducts(topProductsCount));
-    }
-
-    @Override
-    public List<ProductDto> getProducts(ProductType productType, SortType sortType, int page) {
-        int productNumber = (page - 1) * ProductsPerPage;
-        return productMapper.toDtoList(productDao.getProducts(productType, sortType, productNumber, ProductsPerPage));
-    }
-
-    @Override
-    public List<Object> getProducts(ProductType productType) {
-        return productDao.getProducts(productType);
-    }
-
-    @Override
-    public int getPagesCount(ProductType productType) {
-
-        return (int) Math.ceil(1.0 * productDao.countProducts(productType) / ProductsPerPage);
-    }
-
-    @Override
-    public int getPagesCount(String searchWord) {
-        return (int) Math.ceil(1.0 * productDao.countSearchProducts(searchWord) / ProductsPerPage);
-    }
-
-    @Override
-    public List<ProductDto> searchProducts(String searchWord, SortType sortType, int page) {
-        int productNumber = (page - 1) * ProductsPerPage;
-        return productMapper.toDtoList(productDao.getProductsByName(searchWord, sortType, productNumber, ProductsPerPage));
+    @Transactional(readOnly = true)
+    public int getPagesCount(String productType) {
+        return (int) Math.ceil(1.0 * productDao.countProducts(ProductType.getEnum(productType)) / productsPerPage);
     }
 
     @Override
     public void changeAvailable(int id) {
-        switch(this.defineProductType(id)) {
+        switch (defineProductType(id)) {
             case COMPUTERS:
                 Computer computer = productDao.getComputer(id);
                 computer.setAvailable(!computer.isAvailable());
@@ -127,6 +118,10 @@ public class ProductServiceImpl implements ProductService {
                 phone.setAvailable(!phone.isAvailable());
                 productDao.updatePhone(phone);
                 break;
+            default:
+                String message = "Product type in undefined";
+                LOGGER.error(message);
+                throw new IllegalArgumentException(message);
         }
     }
 
@@ -152,23 +147,21 @@ public class ProductServiceImpl implements ProductService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public PhoneDto getPhone(int id) {
         return phoneMapper.toDto(productDao.getPhone(id));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public LaptopDto getLaptop(int id) {
         return laptopMapper.toDto(productDao.getLaptop(id));
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ComputerDto getComputer(int id) {
         return computerMapper.toDto(productDao.getComputer(id));
-    }
-
-    @Override
-    public ProductDto getProduct(int id) {
-        return productMapper.toDto(productDao.getProduct(id));
     }
 
 }

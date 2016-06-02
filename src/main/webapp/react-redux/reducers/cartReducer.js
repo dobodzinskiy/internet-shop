@@ -7,20 +7,22 @@ const initialCartState = {
     amount : 0
 };
 const toCart = (map, action) => {
-    if(map.has(action.product)) {
-        map.set(action.product, map.get(action.product) + 1)
+    var product = JSON.stringify(action.product);
+    if(map.has(product)) {
+        map.set(product, map.get(product) + 1)
     }
     else {
-        map.set(action.product, 1)
+        map.set(product, 1)
     }
     return map;
 };
 const subtract = (map, action) => {
-    if(map.get(action.product) > 1) {
-        map.set(action.product, map.get(action.product) - 1);
+    var product = JSON.stringify(action.product);
+    if(map.get(product) > 1) {
+        map.set(product, map.get(product) - 1);
     }
     else {
-        map.delete(action.product);
+        map.delete(product);
     }
     return map;
 };
@@ -34,21 +36,22 @@ module.exports = function(state = initialCartState, action) {
             });
         case types.TO_CART :
             return Object.assign({}, state, {
-                productsMap : toCart(newMap, action),           //TODO make working buy in productPage, do via jquery (toCart(id))
+                productsMap : toCart(newMap, action),
                 totalPrice : state.totalPrice + action.product.price,
                 amount : state.amount + 1
             });
         case types.FROM_CART :
-            var newPrice = state.totalPrice - action.product.price * newMap.get(action.product);
-            var newAmount = state.amount - newMap.get(action.product);
-            newMap.delete(action.product);
+            var newPrice = state.totalPrice - action.product.price * newMap.get(JSON.stringify(action.product));
+            var newAmount = state.amount - newMap.get(JSON.stringify(action.product));
+            newMap.delete(JSON.stringify(action.product));
             return Object.assign({}, state, {
                 productsMap : newMap,
                 totalPrice : newPrice,
                 amount : newAmount
             });
         case types.ADD_IN_CART :
-            newMap.set(action.product, newMap.get(action.product) + 1);
+            var product = JSON.stringify(action.product);
+            newMap.set(product, newMap.get(product) + 1);
             return Object.assign({}, state, {
                 productsMap : newMap,
                 totalPrice : state.totalPrice + action.product.price,

@@ -1,16 +1,16 @@
 var types = require('./actionTypes');
 
 module.exports = {
-    getOrdersList : function(orders) {
+    getOrdersList: function (orders) {
         return {
-            type : types.GET_ORDERS_LIST,
+            type: types.GET_ORDERS_LIST,
             orders
         }
     },
-    getUserOrders : function(orders) {
+    changeOrderState: function (order) {
         return {
-            type : types.GET_USER_ORDERS,
-            orders
+            type: types.CHANGE_ORDER_STATE,
+            order
         }
     }
 };

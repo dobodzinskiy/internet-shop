@@ -3,9 +3,7 @@ package com.shop.service;
 import com.shop.dto.ComputerDto;
 import com.shop.dto.LaptopDto;
 import com.shop.dto.PhoneDto;
-import com.shop.dto.ProductDto;
 import com.shop.entity.ProductType;
-import com.shop.entity.SortType;
 
 import java.util.List;
 
@@ -14,30 +12,30 @@ public interface ProductService {
     ProductType defineProductType(int id);
 
     PhoneDto addPhone(PhoneDto phoneDto);
+
     LaptopDto addLaptop(LaptopDto laptopDto);
+
     ComputerDto addComputer(ComputerDto computerDto);
 
     PhoneDto updatePhone(PhoneDto phoneDto);
+
     LaptopDto updateLaptop(LaptopDto laptopDto);
-    ComputerDto updateComputer(ComputerDto computerDto );
+
+    ComputerDto updateComputer(ComputerDto computerDto);
 
     PhoneDto getPhone(int id);
+
     LaptopDto getLaptop(int id);
+
     ComputerDto getComputer(int id);
-    ProductDto getProduct(int id);
 
-    List<PhoneDto> getPhones();
-    List<LaptopDto> getLaptops();
-    List<ComputerDto> getComputers();
+    List<PhoneDto> getPhones(int page, String sortType);
 
-    List<ProductDto> getTopProducts();
+    List<LaptopDto> getLaptops(int page, String sortType);
 
-    List<ProductDto> getProducts(ProductType productType, SortType sortType, int page);
-    List<ProductDto> searchProducts(String searchWord, SortType sortType, int page);
-    List<Object> getProducts(ProductType productType);
+    List<ComputerDto> getComputers(int page, String sortType);
 
-    int getPagesCount(ProductType productType);
-    int getPagesCount(String searchWord);
+    int getPagesCount(String productType);
 
     void changeAvailable(int id);
 }

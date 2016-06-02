@@ -28,7 +28,7 @@ public class ComputerMapperTest {
         computerDto.setPhoto("photo");
         computerDto.setPrice(BigDecimal.valueOf(1000));
         computerDto.setModel("model");
-        computerDto.setType(ProductType.COMPUTERS);
+        computerDto.setType(ProductType.COMPUTERS.getValue());
         computerDto.setAvailable(true);
         computerDto.setSize("10 x 10");
         computerDto.setWeight(100);
@@ -97,7 +97,7 @@ public class ComputerMapperTest {
         assertEquals("photo", computerDto.getPhoto());
         assertEquals(BigDecimal.valueOf(1000), computerDto.getPrice());
         assertEquals("model", computerDto.getModel());
-        assertEquals(ProductType.COMPUTERS, computerDto.getType());
+        assertEquals(ProductType.COMPUTERS.getValue(), computerDto.getType());
         assertTrue(computerDto.isAvailable());
         assertEquals("10 x 10", computerDto.getSize());
         assertEquals(100, (int) computerDto.getWeight());
@@ -146,7 +146,7 @@ public class ComputerMapperTest {
             assertEquals("photo", computerDto.getPhoto());
             assertEquals(BigDecimal.valueOf(1000), computerDto.getPrice());
             assertEquals("model", computerDto.getModel());
-            assertEquals(ProductType.COMPUTERS, computerDto.getType());
+            assertEquals(ProductType.COMPUTERS.getValue(), computerDto.getType());
             assertTrue(computerDto.isAvailable());
             assertEquals("10 x 10", computerDto.getSize());
             assertEquals(100, (int) computerDto.getWeight());
@@ -173,7 +173,7 @@ public class ComputerMapperTest {
         computerDto.setPhoto("photo");
         computerDto.setPrice(BigDecimal.valueOf(1000));
         computerDto.setModel("model");
-        computerDto.setType(ProductType.COMPUTERS);
+        computerDto.setType(ProductType.COMPUTERS.getValue());
         computerDto.setAvailable(true);
         computerDto.setSize("10 x 10");
         computerDto.setWeight(100);
@@ -190,7 +190,7 @@ public class ComputerMapperTest {
 
         computerDtos.add(computerDto);
 
-        List<Computer> computers = new ArrayList<>();
+        List<Computer> computers = computerMapper.fromDtoList(computerDtos);
         for(Computer computer : computers) {
             assertEquals(1, computer.getId());
             assertEquals("name", computer.getName());

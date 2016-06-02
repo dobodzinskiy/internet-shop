@@ -2,7 +2,7 @@ package com.shop.mapper;
 
 import com.shop.dto.LaptopDto;
 import com.shop.entity.Laptop;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.shop.entity.ProductType;
 import org.springframework.stereotype.Component;
 
 import java.util.ArrayList;
@@ -13,13 +13,13 @@ public class LaptopMapper implements Mapper<Laptop, LaptopDto> {
 
     @Override
     public Laptop fromDto(LaptopDto laptopDto) {
-        Laptop laptop = new Laptop  ();
+        Laptop laptop = new Laptop();
         laptop.setId(laptopDto.getId());
         laptop.setName(laptopDto.getName());
         laptop.setPhoto(laptopDto.getPhoto());
         laptop.setPrice(laptopDto.getPrice());
         laptop.setModel(laptopDto.getModel());
-        laptop.setType(laptopDto.getType());
+        laptop.setType(ProductType.LAPTOPS);
         laptop.setAvailable(laptopDto.isAvailable());
         laptop.setSize(laptopDto.getSize());
         laptop.setWeight(laptopDto.getWeight());
@@ -31,8 +31,7 @@ public class LaptopMapper implements Mapper<Laptop, LaptopDto> {
         laptop.setDescription(laptopDto.getDescription());
         laptop.setProcessor(laptopDto.getProcessor());
         laptop.setCompany(laptopDto.getCompany());
-        laptop.setKeyboardLight(laptopDto.isKeyboardLight() );
-
+        laptop.setKeyboardLight(laptopDto.isKeyboardLight());
         return laptop;
     }
 
@@ -44,7 +43,7 @@ public class LaptopMapper implements Mapper<Laptop, LaptopDto> {
         laptopDto.setPhoto(laptop.getPhoto());
         laptopDto.setPrice(laptop.getPrice());
         laptopDto.setModel(laptop.getModel());
-        laptopDto.setType(laptop.getType());
+        laptopDto.setType(ProductType.LAPTOPS.getValue());
         laptopDto.setAvailable(laptop.isAvailable());
         laptopDto.setSize(laptop.getSize());
         laptopDto.setWeight(laptop.getWeight());
@@ -57,25 +56,28 @@ public class LaptopMapper implements Mapper<Laptop, LaptopDto> {
         laptopDto.setProcessor(laptop.getProcessor());
         laptopDto.setCompany(laptop.getCompany());
         laptopDto.setKeyboardLight(laptop.isKeyboardLight());
-
         return laptopDto;
     }
 
     @Override
     public List<LaptopDto> toDtoList(List<Laptop> laptops) {
         List<LaptopDto> laptopDtos = new ArrayList<>();
-        for(Laptop laptop : laptops) {
+
+        for (Laptop laptop : laptops) {
             laptopDtos.add(this.toDto(laptop));
         }
+
         return laptopDtos;
     }
 
     @Override
     public List<Laptop> fromDtoList(List<LaptopDto> laptopDtos) {
         List<Laptop> laptops = new ArrayList<>();
-        for(LaptopDto laptopDto : laptopDtos) {
+
+        for (LaptopDto laptopDto : laptopDtos) {
             laptops.add(this.fromDto(laptopDto));
         }
+
         return laptops;
     }
 }

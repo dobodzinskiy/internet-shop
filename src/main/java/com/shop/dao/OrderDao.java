@@ -4,9 +4,6 @@ import com.shop.entity.Order;
 
 import java.util.List;
 
-/**
- * Created by dobodzinskiy on 24.03.2016.
- */
 public interface OrderDao {
 
     List<Order> getOrdersList();

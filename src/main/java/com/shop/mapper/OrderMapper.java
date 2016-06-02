@@ -1,35 +1,28 @@
 package com.shop.mapper;
 
 import com.shop.dto.OrderDto;
-import com.shop.dto.ProductDto;
 import com.shop.entity.Order;
-import com.shop.entity.Product;
+import com.shop.entity.OrderState;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
 
-import java.util.ArrayList;
-import java.util.HashMap;
+import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.Set;
+import java.util.stream.Collectors;
 
-/**
- * Created by dobodzinskiy on 22.03.2016.
- */
 @Component("orderMapper")
 public class OrderMapper implements Mapper<Order, OrderDto> {
 
     @Autowired
     private ProductMapper productMapper;
+
     @Override
     public Order fromDto(OrderDto orderDto) {
         Order order = new Order();
-
         order.setId(orderDto.getId());
-        order.setDate(orderDto.getDate());
-        order.setOrderState(orderDto.getOrderState());
+        order.setDate(new Date(System.currentTimeMillis()));
+        order.setOrderState(OrderState.getEnum(orderDto.getOrderState()));
         order.setPrice(orderDto.getPrice());
-
         return order;
     }
 
@@ -40,19 +33,14 @@ public class OrderMapper implements Mapper<Order, OrderDto> {
         orderDto.setProducts(productMapper.toDtoList(order.getProducts()));
         orderDto.setUsername(order.getUser().getLogin());
         orderDto.setPrice(order.getPrice());
-        orderDto.setOrderState(order.getOrderState());
-        orderDto.setDate(order.getDate());
-
+        orderDto.setOrderState(order.getOrderState().getValue());
+        orderDto.setDate(order.getDate().toLocaleString());
         return orderDto;
     }
 
     @Override
     public List<OrderDto> toDtoList(List<Order> orders) {
-        List<OrderDto> orderDtoList = new ArrayList<OrderDto>();
-        for(Order order : orders) {
-            orderDtoList.add(this.toDto(order));
-        }
-        return orderDtoList;
+        return orders.stream().map(this::toDto).collect(Collectors.toList());
     }
 
     @Override

@@ -39,6 +39,8 @@ public class ProductMapperTest {
         ProductDto productDto = productMapper.toDto(product);
         assertEquals(1, productDto.getId());
         assertEquals("HTC 1", productDto.getName());
+        assertEquals("macbookair.jpg", productDto.getPhoto());
+        assertEquals(ProductType.PHONES.getValue(), productDto.getType());
     }
 
     @Test

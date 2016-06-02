@@ -33,9 +33,10 @@ CREATE TABLE `users` (
   `user_login` varchar(20) NOT NULL,
   `phone` varchar(20) NOT NULL,
   `staff` tinyint(4) NOT NULL DEFAULT '0',
+  `registration_date` date NOT NULL,
   PRIMARY KEY (`user_id`),
   UNIQUE KEY `users_user_login_uindex` (`user_login`)
-) ENGINE=InnoDB AUTO_INCREMENT=28 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=30 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -44,7 +45,7 @@ CREATE TABLE `users` (
 
 LOCK TABLES `users` WRITE;
 /*!40000 ALTER TABLE `users` DISABLE KEYS */;
-INSERT INTO `users` VALUES (20,'Denis','Obodzinskiy','Male','denisobodzinskiy@gmail.com','01inafop',1,'admin','380502838571',1),(24,'Denis','Obodzinskiy','Male','denisobodzinskiy@gmail.com','user',1,'denis','380502838571',0),(25,'Denis','Obodzinskiy','Male','denisobodzinskiy@gmail.com','moder',1,'Moder','380502838571',1),(26,'Denis','Obodzinskiy','Male','denisobodzinskiy@gmail.com','manager',1,'Manager','380502838571',1),(27,'Vlad','Yevlakov','Male','yevlakov@gmail.com','vlad',1,'VladYevlakov','380664828921',0);
+INSERT INTO `users` VALUES (20,'Denis','Obodzinskiy','Male','denisobodzinskiy@gmail.com','01inafop',1,'admin','380502838571',1,'2016-04-20'),(24,'Denis','Obodzinskiy','Male','denisobodzinskiy@gmail.com','denis',1,'denis','380502838571',0,'2016-05-16'),(25,'Denis','Obodzinskiy','Male','denisobodzinskiy@gmail.com','moder',1,'Moder','380502838571',0,'2016-05-16'),(26,'Denis','Obodzinskiy','Male','denisobodzinskiy@gmail.com','manager',1,'Manager','380502838571',1,'2016-05-09'),(27,'name','LastName','Male','denisobodzinskiy@gmail.com','user',1,'newUser','380502838571',0,'2016-05-20'),(28,NULL,NULL,NULL,'denisobodzinskiy@gmail.com','user',1,'user5','380502838571',0,'2016-05-20'),(29,NULL,NULL,NULL,'denisobodzinskiy@gmail.com','testUser',1,'testUser','380502838571',0,'2016-05-26');
 /*!40000 ALTER TABLE `users` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -57,4 +58,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-11 23:43:07
+-- Dump completed on 2016-06-02 17:55:26

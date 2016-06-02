@@ -27,7 +27,7 @@ public class LaptopMapperTest {
         laptopDto.setPhoto("photo");
         laptopDto.setPrice(BigDecimal.valueOf(1000));
         laptopDto.setModel("model");
-        laptopDto.setType(ProductType.LAPTOPS);
+        laptopDto.setType(ProductType.LAPTOPS.getValue());
         laptopDto.setAvailable(true);
         laptopDto.setSize("10 x 10");
         laptopDto.setWeight(100);
@@ -92,7 +92,7 @@ public class LaptopMapperTest {
         assertEquals("photo", laptopDto.getPhoto());
         assertEquals(BigDecimal.valueOf(1000), laptopDto.getPrice());
         assertEquals("model", laptopDto.getModel());
-        assertEquals(ProductType.LAPTOPS, laptopDto.getType());
+        assertEquals(ProductType.LAPTOPS.getValue(), laptopDto.getType());
         assertTrue(laptopDto.isAvailable());
         assertEquals("10 x 10", laptopDto.getSize());
         assertEquals(100, (int) laptopDto.getWeight());
@@ -140,7 +140,7 @@ public class LaptopMapperTest {
             assertEquals("photo", laptopDto.getPhoto());
             assertEquals(BigDecimal.valueOf(1000), laptopDto.getPrice());
             assertEquals("model", laptopDto.getModel());
-            assertEquals(ProductType.LAPTOPS, laptopDto.getType());
+            assertEquals(ProductType.LAPTOPS.getValue(), laptopDto.getType());
             assertTrue(laptopDto.isAvailable());
             assertEquals("10 x 10", laptopDto.getSize());
             assertEquals(100, (int) laptopDto.getWeight());
@@ -166,7 +166,7 @@ public class LaptopMapperTest {
         laptopDto.setPhoto("photo");
         laptopDto.setPrice(BigDecimal.valueOf(1000));
         laptopDto.setModel("model");
-        laptopDto.setType(ProductType.LAPTOPS);
+        laptopDto.setType(ProductType.LAPTOPS.getValue());
         laptopDto.setAvailable(true);
         laptopDto.setSize("10 x 10");
         laptopDto.setWeight(100);

@@ -1,16 +1,34 @@
 package com.shop.entity;
 
-import javax.persistence.*;
+import javax.persistence.CascadeType;
+import javax.persistence.CollectionTable;
+import javax.persistence.Column;
+import javax.persistence.ElementCollection;
+import javax.persistence.Entity;
+import javax.persistence.EnumType;
+import javax.persistence.Enumerated;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.JoinTable;
+import javax.persistence.ManyToMany;
+import javax.persistence.NamedQueries;
+import javax.persistence.NamedQuery;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import java.util.Date;
 import java.util.List;
 import java.util.Set;
 
 @Entity
 @Table(name = "users")
 @NamedQueries({
-        @NamedQuery(name = "getList",        query = "select distinct u from User u  where u.staff = false "),
-        @NamedQuery(name = "getUser",        query = "select distinct u from User u  where u.id = :id"),
-        @NamedQuery(name = "getUserByLogin", query = "select distinct u from User u  where u.login= :login"),
-        @NamedQuery(name = "getStaff",       query = "select distinct u from User u  where u.staff = true ")
+        @NamedQuery(name = "User.getList", query = "select distinct u from User u  where u.staff = false "),
+        @NamedQuery(name = "User.getUser", query = "select distinct u from User u  where u.id = :id"),
+        @NamedQuery(name = "User.getUserByLogin", query = "select distinct u from User u  where u.login= :login"),
+        @NamedQuery(name = "User.getStaff", query = "select distinct u from User u  where u.staff = true ")
 })
 public class User {
 
@@ -40,6 +58,9 @@ public class User {
     @Column(name = "enabled")
     private boolean enabled;
 
+    @Column(name = "registration_date")
+    private Date date;
+
     @Column(name = "phone")
     private String phone;
 
@@ -52,11 +73,12 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Set<UserRoles> userRoles;
 
-    @OneToMany(mappedBy="user", cascade= CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Order> orders;
 
     @ManyToMany(cascade = CascadeType.REMOVE, fetch = FetchType.EAGER)
-    @JoinTable(name = "user_products", joinColumns = @JoinColumn(name = "user_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @JoinTable(name = "user_products", joinColumns = @JoinColumn(name = "user_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products;
 
     public int getId() {
@@ -123,6 +145,14 @@ public class User {
         this.password = password;
     }
 
+    public Date getDate() {
+        return new Date(date.getTime());
+    }
+
+    public void setDate(Date date) {
+        this.date = new Date(date.getTime());
+    }
+
     public String getLogin() {
         return login;
     }
@@ -171,25 +201,40 @@ public class User {
         User user = (User) o;
 
         if (id != user.id) return false;
-        return login.equals(user.login);
+        if (firstName != null ? !firstName.equals(user.firstName) : user.firstName != null) return false;
+        if (lastName != null ? !lastName.equals(user.lastName) : user.lastName != null) return false;
+        if (login != null ? !login.equals(user.login) : user.login != null) return false;
+        return date != null ? date.equals(user.date) : user.date == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + login.hashCode();
+        result = 31 * result + (firstName != null ? firstName.hashCode() : 0);
+        result = 31 * result + (lastName != null ? lastName.hashCode() : 0);
+        result = 31 * result + (login != null ? login.hashCode() : 0);
+        result = 31 * result + (date != null ? date.hashCode() : 0);
         return result;
     }
 
     @Override
     public String toString() {
         return "User{" +
-                "firstName='" + firstName + '\'' +
+                "id=" + id +
+                ", firstName='" + firstName + '\'' +
                 ", lastName='" + lastName + '\'' +
-                ", id=" + id +
                 ", gender='" + gender + '\'' +
                 ", email='" + email + '\'' +
+                ", password='" + password + '\'' +
+                ", login='" + login + '\'' +
+                ", enabled=" + enabled +
+                ", date=" + date +
+                ", phone='" + phone + '\'' +
+                ", staff=" + staff +
+                ", userRoles=" + userRoles +
+                ", orders=" + orders +
+                ", products=" + products +
                 '}';
     }
 }

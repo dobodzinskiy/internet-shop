@@ -1,7 +1,6 @@
-package com.shop.controller;
+package com.shop.controller.rest;
 
-import com.shop.dto.ProductDto;
-import com.shop.service.ProductService;
+import com.shop.dto.UserDto;
 import com.shop.service.UserDetailsServiceImpl;
 import com.shop.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,26 +13,31 @@ import org.springframework.security.authentication.UsernamePasswordAuthenticatio
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.UserDetails;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
 
-import java.util.List;
+import javax.validation.Valid;
 
 @RestController
 @RequestMapping("/")
-public class HomeRestController {
+public class AuthController {
 
     @Autowired
-    private ProductService productService;
-    @Autowired
     private UserService userService;
+
     @Autowired
     @Qualifier("authenticationManager")
     private AuthenticationManager authenticationManager;
+
     @Autowired
     private UserDetailsServiceImpl userDetailsService;
 
     @RequestMapping(value = "/login", method = RequestMethod.POST)
-    public ResponseEntity<?> login(@RequestParam("j_username") String username, @RequestParam("j_password") String password) {
+    public ResponseEntity<?> login(@RequestParam("j_username") String username,
+                                   @RequestParam("j_password") String password) {
 
         UsernamePasswordAuthenticationToken token = new UsernamePasswordAuthenticationToken(username, password);
         UserDetails userDetails = userDetailsService.loadUserByUsername(username);
@@ -54,9 +58,24 @@ public class HomeRestController {
         return new ResponseEntity<>(HttpStatus.OK);
     }
 
+    @RequestMapping(value = "/signUp", method = RequestMethod.POST)
+    public ResponseEntity<?> signUp(@Valid @RequestBody UserDto userDto) {
+        if (userService.getUser(userDto.getLogin()) == null) {
+            userService.addUser(userDto);
+            UsernamePasswordAuthenticationToken token =
+                    new UsernamePasswordAuthenticationToken(userDto.getLogin(), userDto.getPassword());
+            UserDetails userDetails = userDetailsService.loadUserByUsername(userDto.getLogin());
+            token.setDetails(userDetails);
+            Authentication auth = authenticationManager.authenticate(token);
+            SecurityContextHolder.getContext().setAuthentication(auth);
+            return new ResponseEntity<Object>(userService.getUser(auth.getName()), HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 
-    @RequestMapping(value = "/topProducts", method = RequestMethod.GET)
-    public List<ProductDto> getTopProducts() {
-        return productService.getTopProducts();
+    @RequestMapping(value = "/loginCheck", method = RequestMethod.GET)
+    public boolean isLoginUnique(String login) {
+        return null == userService.getUser(login);
     }
 }

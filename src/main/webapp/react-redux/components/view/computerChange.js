@@ -26,8 +26,8 @@ const ProductChangePanel = React.createClass({
                 company: $("#company").val(),
                 processor: $("#processor").val(),
                 description: $("#description").val(),
-                motherboard : $("#motherboard").val(),
-                coolingSystem : $("#coolingSystem").val()
+                motherboard: $("#motherboard").val(),
+                coolingSystem: $("#coolingSystem").val()
             });
             var url = this.props.urlProduct;
             hashHistory.replace(url);
@@ -36,6 +36,10 @@ const ProductChangePanel = React.createClass({
     render: function () {
         var product = this.props.product;
         var photoUrl = "/resources/images/" + product.photo;
+        var available = 'Available';
+        if (product.available) {
+            available = 'Unavailable';
+        }
         return (
             <div className="row">
                 <h2>
@@ -56,6 +60,10 @@ const ProductChangePanel = React.createClass({
                                 New photo
                             </Button> &nbsp;
                             <Button bsStyle="default" onClick={this.handleChangeProduct}>Save</Button> &nbsp;
+                            <Button bsStyle="default"
+                                    onClick={(e) => { e.preventDefault(); this.props.changeAvailable(product.id);}}>
+                                { available }
+                            </Button> &nbsp;
                             <div className="col-sm-4">
                                 <input className="form-control" type="text" id="price" defaultValue={product.price}
                                        placeholder="Product price"/>
@@ -63,7 +71,8 @@ const ProductChangePanel = React.createClass({
                             <br/>
                             <br/>
                             <h3>Description</h3>
-                            <h5><textarea className="form-control" id="description" rows="5" defaultValue={product.description}/></h5>
+                            <h5><textarea className="form-control" id="description" rows="5"
+                                          defaultValue={product.description}/></h5>
                         </div>
                     </div>
                 </div>
@@ -106,15 +115,18 @@ const ProductChangePanel = React.createClass({
                             </tr>
                             <tr>
                                 <td><b>Processor</b></td>
-                                <td><input className="form-control" id="processor" defaultValue={product.processor}/></td>
+                                <td><input className="form-control" id="processor" defaultValue={product.processor}/>
+                                </td>
                             </tr>
                             <tr>
                                 <td><b>Motherboard</b></td>
-                                <td><input className="form-control" id="motherboard" defaultValue={product.motherboard}/></td>
+                                <td><input className="form-control" id="motherboard"
+                                           defaultValue={product.motherboard}/></td>
                             </tr>
                             <tr>
                                 <td><b>Cooling system</b></td>
-                                <td><input className="form-control" id="coolingSystem" defaultValue={product.coolingSystem}/></td>
+                                <td><input className="form-control" id="coolingSystem"
+                                           defaultValue={product.coolingSystem}/></td>
                             </tr>
                             </tbody>
                         </table>
@@ -128,7 +140,10 @@ const ProductChangePanel = React.createClass({
 module.exports = function (props) {
     return (
         <div className="container">
-            <ProductChangePanel urlProduct={props.urlProduct} product={props.product} changeProduct={props.changeProduct}/>
+            <ProductChangePanel urlProduct={props.urlProduct}
+                                product={props.product}
+                                changeAvailable={props.changeAvailable}
+                                changeProduct={props.changeProduct}/>
         </div>
     )
 };

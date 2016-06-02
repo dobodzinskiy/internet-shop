@@ -2,3 +2,14 @@
     max-height: 400px;
     overflow-y: auto;
 }
+
+.tdImg {
+    max-height: 300px;
+    text-align: center;
+}
+.align-center {
+    text-align: center;
+}
+.non-available {
+    opacity: 0.4;
+}

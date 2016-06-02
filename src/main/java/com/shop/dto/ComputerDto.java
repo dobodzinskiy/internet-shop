@@ -1,6 +1,5 @@
 package com.shop.dto;
 
-import com.shop.entity.Comment;
 import com.shop.entity.ProductType;
 import org.hibernate.validator.constraints.NotEmpty;
 
@@ -10,13 +9,11 @@ import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.List;
 
-/**
- * Created by dobodzinskiy on 30.03.2016.
- */
 public class ComputerDto {
+
     private int id;
+
     @NotEmpty(message = "Please, enter device name!")
     @Size(min = 2, max = 20, message = "Name should be between 2 and 20 characters!")
     private String name;
@@ -33,8 +30,7 @@ public class ComputerDto {
     @NotEmpty(message = "Please, enter model!")
     private String model;
 
-    private ProductType type = ProductType.COMPUTERS;
-
+    private String type = ProductType.COMPUTERS.getValue();
     private boolean available;
 
     @NotEmpty(message = "Please, enter size!")
@@ -114,11 +110,11 @@ public class ComputerDto {
         this.model = model;
     }
 
-    public ProductType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ProductType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -224,16 +220,5 @@ public class ComputerDto {
 
     public void setCoolingSystem(String coolingSystem) {
         this.coolingSystem = coolingSystem;
-    }
-
-    @Override
-    public String toString() {
-        return model +
-                "/" + weight +
-                "g/" + storage +
-                "gb/" + ram +
-                "gb/" + screen +
-                "'/" + os +
-                "/" + processor;
     }
 }

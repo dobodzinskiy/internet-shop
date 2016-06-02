@@ -1,6 +1,7 @@
 var React = require('react');
 var {Link} = require('react-router');
-var {Button, Modal, Image} = require('react-bootstrap');
+var {Button, Modal, Pagination} = require('react-bootstrap');
+var $ = require('jquery');
 
 const ProductPanel = React.createClass({
     getInitialState: function () {
@@ -16,21 +17,33 @@ const ProductPanel = React.createClass({
     },
     render: function () {
         var product = this.props.product;
-        var photo = "../resources/images/" + product.photo;
         var url = "/products/" + this.props.type + "/" + product.id;
+
+        var photo = "../resources/images/" + product.photo;
+        var Photo = <img src={photo} onClick={(e) => { e.preventDefault(); this.open();}} height="250"/>;
+        var Buy = <Button bsStyle="primary"
+                          onClick={(e) => { e.preventDefault(); this.props.toCart(product);}}>To cart</Button>;
+        if (!product.available) {
+            Photo = <img className="non-available" src={photo} onClick={(e) => { e.preventDefault(); this.open();}}
+                         height="250"/>;
+            Buy = <Button bsStyle="primary" disabled> To cart </Button>;
+        }
+
         return (
             <div>
                 <div className="col-sm-4">
                     <div className="thumbnail">
                         <div className="caption">
-                            <Image src={photo} onClick={(e) => { e.preventDefault(); this.open();}} responsive/>
+                            <div className="tdImg">
+                                {Photo}
+                            </div>
+
                             <h3>
                                 <Link to={url}>{product.name}</Link>
                             </h3>
                             <p>
-                                <Button bsStyle="primary"
-                                        onClick={(e) => { e.preventDefault(); this.props.toCart(product);}}>Buy</Button> &nbsp;
-                                <Button bsStyle="default">Change</Button> &nbsp;
+                                {Buy}
+                                &nbsp;
                                 {product.price} UAH
                             </p>
                         </div>
@@ -73,17 +86,40 @@ module.exports = function (props) {
     return (
         <div className="container">
             <div className="page-header">
-                <h2> {header} </h2>
-                <button className="btn btn-primary" onClick={() => {alert(1);}}>
-                    Add
-                </button>
+                <h2>{header}</h2>
+                <h4>
+                    <form className="form-horizontal">
+                        <div className="form-group">
+                            <label className="control-label col-sm-2" for="email">Sort:</label>
+                            <div className="col-sm-4">
+                                <select className="form-control" id="sortType"
+                                        onChange={()=> {props.changeSort($("#sortType").val());}}>
+                                    <option value="name">Name</option>
+                                    <option value="priceDesc">Price desc</option>
+                                    <option value="priceAsc">Price</option>
+                                    <option value="company">Company</option>
+                                </select>
+                            </div>
+                        </div>
+                    </form>
+                </h4>
             </div>
             <div className="row">
                 { props.products.map(function (product) {
                     return (
-                        <ProductPanel product={product} type={props.type} toCart={props.toCart} key={product.id}/>
+                        <ProductPanel product={product}
+                                      type={props.type}
+                                      toCart={props.toCart}
+                                      key={product.id}/>
                     );
                 })}
+            </div>
+            <div className="text-center">
+                <Pagination
+                    bsSize="medium"
+                    items={props.pages}
+                    activePage={props.page}
+                    onSelect={(e) => {props.changePage(e);}}/>
             </div>
         </div>
     )

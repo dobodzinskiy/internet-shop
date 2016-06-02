@@ -1,11 +1,28 @@
 package com.shop.entity;
 
-/**
- * Created by dobodzinskiy on 30.03.2016.
- */
 public enum UserRoles {
-    ROLE_USER,
-    ROLE_ADMIN,
-    ROLE_MANAGER,
-    ROLE_MODERATOR
+
+    ROLE_USER("user"),
+    ROLE_ADMIN("admin"),
+    ROLE_MANAGER("manager"),
+    ROLE_MODERATOR("moderator");
+
+    private String value;
+
+    UserRoles(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static UserRoles getEnum(String value) {
+        for (UserRoles v : values())
+            if (v.getValue().equalsIgnoreCase(value)) {
+                return v;
+            }
+
+        throw new IllegalArgumentException(String.format("Cannot convert '%s' value to enum", value));
+    }
 }

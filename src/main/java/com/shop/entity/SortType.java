@@ -1,11 +1,29 @@
 package com.shop.entity;
 
-/**
- * Created by dobodzinskiy on 04.04.2016.
- */
 public enum SortType {
-    Name,
-    PriceDesc,
-    PriceAsc,
-    Company
+
+    NAME("name"),
+    PRICE_DESC("priceDesc"),
+    PRICE_ASC("priceAsc"),
+    COMPANY("company");
+
+    private String value;
+
+    SortType(String value) {
+        this.value = value;
+    }
+
+    public String getValue() {
+        return value;
+    }
+
+    public static SortType getEnum(String value) {
+        for (SortType v : values())
+            if (v.getValue().equalsIgnoreCase(value)) {
+                return v;
+            }
+
+        throw new IllegalArgumentException(String.format("Cannot convert '%s' value to enum", value));
+    }
+
 }

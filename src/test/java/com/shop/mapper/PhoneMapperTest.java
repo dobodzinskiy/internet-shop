@@ -25,7 +25,7 @@ public class PhoneMapperTest {
         phoneDto.setPhoto("photo");
         phoneDto.setPrice(BigDecimal.valueOf(1000));
         phoneDto.setModel("model");
-        phoneDto.setType(ProductType.PHONES);
+        phoneDto.setType(ProductType.PHONES.getValue());
         phoneDto.setAvailable(true);
         phoneDto.setSize("10 x 10");
         phoneDto.setWeight(100);
@@ -96,7 +96,7 @@ public class PhoneMapperTest {
         assertEquals("photo", phoneDto.getPhoto());
         assertEquals(BigDecimal.valueOf(1000), phoneDto.getPrice());
         assertEquals("model", phoneDto.getModel());
-        assertEquals(ProductType.PHONES, phoneDto.getType());
+        assertEquals(ProductType.PHONES.getValue(), phoneDto.getType());
         assertEquals(true, phoneDto.isAvailable());
         assertEquals("10 x 10", phoneDto.getSize());
         assertEquals(100, (int) phoneDto.getWeight());
@@ -148,7 +148,7 @@ public class PhoneMapperTest {
             assertEquals("photo", phoneDto.getPhoto());
             assertEquals(BigDecimal.valueOf(1000), phoneDto.getPrice());
             assertEquals("model", phoneDto.getModel());
-            assertEquals(ProductType.PHONES, phoneDto.getType());
+            assertEquals(ProductType.PHONES.getValue(), phoneDto.getType());
             assertEquals(true, phoneDto.isAvailable());
             assertEquals("10 x 10", phoneDto.getSize());
             assertEquals(100, (int) phoneDto.getWeight());
@@ -176,7 +176,7 @@ public class PhoneMapperTest {
         phoneDto.setPhoto("photo");
         phoneDto.setPrice(BigDecimal.valueOf(1000));
         phoneDto.setModel("model");
-        phoneDto.setType(ProductType.PHONES);
+        phoneDto.setType(ProductType.PHONES.getValue());
         phoneDto.setAvailable(true);
         phoneDto.setSize("10 x 10");
         phoneDto.setWeight(100);

@@ -22,9 +22,10 @@ import java.util.List;
 
 @Entity
 @NamedQueries({
-        @NamedQuery(name = "getOrdersByLogin", query = "select o from Order o where o.user.login = :username"),
-        @NamedQuery(name = "getOrdersById", query = "select o from Order o where o.user.id = :id"),
-        @NamedQuery(name = "getOrdersList", query = "select o from Order o order by o.date desc"),
+        @NamedQuery(name = "Order.getOrdersByLogin",
+                query = "select o from Order o where o.user.login = :username order by o.date desc"),
+        @NamedQuery(name = "Order.getOrdersById", query = "select o from Order o where o.user.id = :id"),
+        @NamedQuery(name = "Order.getOrdersList", query = "select o from Order o order by o.date desc"),
 })
 @Table(name = "orders")
 public class Order {
@@ -39,9 +40,9 @@ public class Order {
     private User user;
 
     @ManyToMany(cascade = CascadeType.DETACH, fetch = FetchType.EAGER)
-    @JoinTable(name = "order_products", joinColumns = @JoinColumn(name = "order_id"), inverseJoinColumns = @JoinColumn(name = "product_id"))
+    @JoinTable(name = "order_products", joinColumns = @JoinColumn(name = "order_id"),
+            inverseJoinColumns = @JoinColumn(name = "product_id"))
     private List<Product> products;
-
 
     @Column(name = "order_date")
     private Date date;
@@ -78,11 +79,11 @@ public class Order {
     }
 
     public Date getDate() {
-        return date;
+        return new Date(date.getTime());
     }
 
     public void setDate(Date date) {
-        this.date = date;
+        this.date = new Date(date.getTime());
     }
 
     public OrderState getOrderState() {
@@ -104,19 +105,23 @@ public class Order {
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
-        if (!(o instanceof Order)) return false;
+        if (o == null || getClass() != o.getClass()) return false;
 
         Order order = (Order) o;
 
         if (id != order.id) return false;
-        return user.equals(order.user);
+        if (date != null ? !date.equals(order.date) : order.date != null) return false;
+        if (orderState != order.orderState) return false;
+        return price != null ? price.equals(order.price) : order.price == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + user.hashCode();
+        result = 31 * result + (date != null ? date.hashCode() : 0);
+        result = 31 * result + (orderState != null ? orderState.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
         return result;
     }
 

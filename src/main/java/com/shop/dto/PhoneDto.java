@@ -5,15 +5,15 @@ import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.DecimalMin;
 import javax.validation.constraints.Digits;
-import javax.validation.constraints.Min;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Pattern;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
-import java.util.List;
 
 public class PhoneDto {
+
     private int id;
+
     @NotEmpty(message = "Please, enter device name!")
     @Size(min = 2, max = 30, message = "Name should be between 2 and 30 characters!")
     private String name;
@@ -30,8 +30,7 @@ public class PhoneDto {
     @NotEmpty(message = "Please, enter model!")
     private String model;
 
-    private ProductType type = ProductType.PHONES;
-
+    private String type = ProductType.PHONES.getValue();
     private boolean available;
 
     @NotEmpty(message = "Please, enter size!")
@@ -114,11 +113,11 @@ public class PhoneDto {
         this.model = model;
     }
 
-    public ProductType getType() {
+    public String getType() {
         return type;
     }
 
-    public void setType(ProductType type) {
+    public void setType(String type) {
         this.type = type;
     }
 
@@ -234,14 +233,4 @@ public class PhoneDto {
         this.messageType = messageType;
     }
 
-    @Override
-    public String toString() {
-        return model +
-                "/" + weight +
-                "g/" + storage +
-                "gb/" + ram +
-                "gb/" + screen +
-                "'/" + os +
-                "/" + processor;
-    }
 }

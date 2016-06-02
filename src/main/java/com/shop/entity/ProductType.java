@@ -1,12 +1,10 @@
 package com.shop.entity;
 
-/**
- * Created by dobodzinskiy on 29.03.2016.
- */
 public enum ProductType {
-    COMPUTERS("Computers"),
-    PHONES("Phones"),
-    LAPTOPS("Laptops");
+
+    COMPUTERS("computers"),
+    PHONES("phones"),
+    LAPTOPS("laptops");
 
     private String value;
 
@@ -18,9 +16,13 @@ public enum ProductType {
         return value;
     }
 
-    @Override
-    public String toString() {
-        return this.getValue();
+    public static ProductType getEnum(String value) {
+        for (ProductType v : values())
+            if (v.getValue().equalsIgnoreCase(value)) {
+                return v;
+            }
+
+        throw new IllegalArgumentException(String.format("Cannot convert '%s' value to enum", value));
     }
 
 }

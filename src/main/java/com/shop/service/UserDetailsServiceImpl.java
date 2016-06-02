@@ -15,7 +15,6 @@ import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-import java.util.stream.Collectors;
 
 @Service("userDetailsService")
 public class UserDetailsServiceImpl implements UserDetailsService {
@@ -37,12 +36,12 @@ public class UserDetailsServiceImpl implements UserDetailsService {
     }
 
     private List<GrantedAuthority> buildUserAuthority(Set<UserRoles> userRoles) {
-
         Set<GrantedAuthority> grantedAuthorities = new HashSet<>();
-        // Build user's authorities
-        for(UserRoles role : userRoles) {
+
+        for (UserRoles role : userRoles) {
             grantedAuthorities.add(new SimpleGrantedAuthority(role.toString()));
         }
+
         return new ArrayList<>(grantedAuthorities);
     }
 }

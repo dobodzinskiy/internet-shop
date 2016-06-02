@@ -18,22 +18,30 @@ import java.math.BigDecimal;
 @Table(name = "products")
 @Inheritance(strategy = InheritanceType.JOINED)
 @NamedQueries({
-        @NamedQuery(name = "getProductsByName", query = "SELECT p from Product p WHERE p.type = :type order by p.name"),
-        @NamedQuery(name = "getProductsByPriceDesc", query = "SELECT p from Product p WHERE p.type = :type order by p.price desc"),
-        @NamedQuery(name = "getProductsByPriceAsc", query = "SELECT p from Product p WHERE p.type = :type order by p.price asc"),
-        @NamedQuery(name = "getProductsByCompany", query = "SELECT p from Product p WHERE p.type = :type order by p.company"),
-
-        @NamedQuery(name = "getTopProducts", query = "select p from Product p order by p.id desc "),
-        @NamedQuery(name = "getProduct", query = "SELECT p from Product p WHERE p.id = :id"),
-
-        @NamedQuery(name = "searchProductsByName", query = "SELECT p from Product p WHERE p.name like :name order by p.name"),
-        @NamedQuery(name = "searchProductsByPriceDesc", query = "SELECT p from Product p WHERE p.name like :name order by p.price desc"),
-        @NamedQuery(name = "searchProductsByPriceAsc", query = "SELECT p from Product p WHERE p.name like :name order by p.price asc"),
-        @NamedQuery(name = "searchProductsByCompany", query = "SELECT p from Product p WHERE p.name like :name order by p.company"),
-
-        @NamedQuery(name = "countProducts", query = "select count(p.id) from Product p where p.type = :type"),
-        @NamedQuery(name = "countSearchProducts", query = "select count(p.id) from Product p where p.name like :name")
-
+        @NamedQuery(name = "Product.getProductsByName",
+                query = "SELECT p from Product p WHERE p.type = :type order by p.name"),
+        @NamedQuery(name = "Product.getProductsByPriceDesc",
+                query = "SELECT p from Product p WHERE p.type = :type order by p.price desc"),
+        @NamedQuery(name = "Product.getProductsByPriceAsc",
+                query = "SELECT p from Product p WHERE p.type = :type order by p.price asc"),
+        @NamedQuery(name = "Product.getProductsByCompany",
+                query = "SELECT p from Product p WHERE p.type = :type order by p.company"),
+        @NamedQuery(name = "Product.getTopProducts",
+                query = "select p from Product p order by p.id desc "),
+        @NamedQuery(name = "Product.getProduct",
+                query = "SELECT p from Product p WHERE p.id = :id"),
+        @NamedQuery(name = "Product.searchProductsByName",
+                query = "SELECT p from Product p WHERE p.name like :name order by p.name"),
+        @NamedQuery(name = "Product.searchProductsByPriceDesc",
+                query = "SELECT p from Product p WHERE p.name like :name order by p.price desc"),
+        @NamedQuery(name = "Product.searchProductsByPriceAsc",
+                query = "SELECT p from Product p WHERE p.name like :name order by p.price asc"),
+        @NamedQuery(name = "Product.searchProductsByCompany",
+                query = "SELECT p from Product p WHERE p.name like :name order by p.company"),
+        @NamedQuery(name = "Product.countProducts",
+                query = "select count(p.id) from Product p where p.type = :type"),
+        @NamedQuery(name = "Product.countSearchProducts",
+                query = "select count(p.id) from Product p where p.name like :name")
 })
 public class Product {
 
@@ -238,16 +246,26 @@ public class Product {
         Product product = (Product) o;
 
         if (id != product.id) return false;
-        if (!name.equals(product.name)) return false;
-        return model.equals(product.model);
+        if (name != null ? !name.equals(product.name) : product.name != null) return false;
+        if (photo != null ? !photo.equals(product.photo) : product.photo != null) return false;
+        if (price != null ? !price.equals(product.price) : product.price != null) return false;
+        if (model != null ? !model.equals(product.model) : product.model != null) return false;
+        if (type != product.type) return false;
+        if (processor != null ? !processor.equals(product.processor) : product.processor != null) return false;
+        return company != null ? company.equals(product.company) : product.company == null;
 
     }
 
     @Override
     public int hashCode() {
         int result = id;
-        result = 31 * result + name.hashCode();
-        result = 31 * result + model.hashCode();
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (photo != null ? photo.hashCode() : 0);
+        result = 31 * result + (price != null ? price.hashCode() : 0);
+        result = 31 * result + (model != null ? model.hashCode() : 0);
+        result = 31 * result + (type != null ? type.hashCode() : 0);
+        result = 31 * result + (processor != null ? processor.hashCode() : 0);
+        result = 31 * result + (company != null ? company.hashCode() : 0);
         return result;
     }
 
@@ -256,8 +274,20 @@ public class Product {
         return "Product{" +
                 "id=" + id +
                 ", name='" + name + '\'' +
+                ", photo='" + photo + '\'' +
                 ", price=" + price +
+                ", model='" + model + '\'' +
                 ", type=" + type +
+                ", available=" + available +
+                ", size='" + size + '\'' +
+                ", weight=" + weight +
+                ", storage=" + storage +
+                ", ram=" + ram +
+                ", screen=" + screen +
+                ", os='" + os + '\'' +
+                ", color='" + color + '\'' +
+                ", description='" + description + '\'' +
+                ", processor='" + processor + '\'' +
                 ", company='" + company + '\'' +
                 '}';
     }

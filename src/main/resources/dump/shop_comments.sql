@@ -34,7 +34,7 @@ CREATE TABLE `comments` (
   KEY `comments_products_product_id_fk` (`product_id`),
   CONSTRAINT `comments_ibfk_2` FOREIGN KEY (`user_id`) REFERENCES `users` (`user_id`),
   CONSTRAINT `comments_products_product_id_fk` FOREIGN KEY (`product_id`) REFERENCES `products` (`product_id`)
-) ENGINE=InnoDB AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=92 DEFAULT CHARSET=utf8;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -43,7 +43,7 @@ CREATE TABLE `comments` (
 
 LOCK TABLES `comments` WRITE;
 /*!40000 ALTER TABLE `comments` DISABLE KEYS */;
-INSERT INTO `comments` VALUES (1,20,5,'laldasf','2016-04-03 17:48:23',2),(2,24,5,'nice','2016-04-15 00:19:42',4),(9,20,5,'lalala','2016-04-27 11:22:38',6),(13,20,3,'helo','2016-04-27 11:34:33',7),(13,20,4,'comment','2016-04-27 11:34:43',8),(13,20,5,'sdoicjsdoic','2016-04-27 11:34:59',9),(8,20,1,'','2016-05-06 00:25:54',14),(8,20,1,'','2016-05-06 00:25:58',15),(9,20,4,'jnlkjbkjhb','2016-05-07 23:53:43',37),(4,20,3,'nice phone','2016-05-11 21:45:22',39);
+INSERT INTO `comments` VALUES (6,20,4,'lmfcldksf','2016-04-27 19:10:44',11),(8,20,5,'comment','2016-05-05 21:28:50',58),(8,20,5,'comment','2016-05-05 21:28:51',59),(8,20,5,'comment','2016-05-05 21:28:54',60),(8,24,5,'lalala','2016-05-16 19:23:02',63),(1,24,4,'lalala','2016-05-23 20:37:48',66),(3,20,5,'comment','2016-05-24 22:50:14',68),(3,20,2,'comment','2016-05-25 14:01:03',72),(5,20,4,'comment','2016-05-26 22:12:16',85),(4,20,5,'dasfdsf','2016-05-27 13:01:31',89),(7,20,3,'comment','2016-05-27 13:54:30',91);
 /*!40000 ALTER TABLE `comments` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -56,4 +56,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-11 23:43:07
+-- Dump completed on 2016-06-02 17:55:25

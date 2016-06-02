@@ -2,10 +2,7 @@ package com.shop.mapper;
 
 import com.shop.dto.OrderDto;
 import com.shop.dto.ProductDto;
-import com.shop.entity.Order;
-import com.shop.entity.Phone;
-import com.shop.entity.Product;
-import com.shop.entity.User;
+import com.shop.entity.*;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.InjectMocks;
@@ -40,13 +37,13 @@ public class OrderMapperTest {
     public void testFromDto() {
         OrderDto orderDto = new OrderDto();
         orderDto.setId(ID);
-        orderDto.setDate(DATE);
-        orderDto.setOrderState(ACCEPTED);
+        orderDto.setDate("DATE");
+        orderDto.setOrderState(OrderState.ACCEPTED.getValue());
         orderDto.setPrice(PRICE);
 
         Order order = orderMapper.fromDto(orderDto);
         assertEquals(ID, order.getId());
-        assertEquals(DATE, order.getDate());
+        assertEquals(new Date(System.currentTimeMillis()), order.getDate());
         assertEquals(ACCEPTED, order.getOrderState());
         assertEquals(PRICE, order.getPrice());
     }
@@ -75,8 +72,8 @@ public class OrderMapperTest {
 
         OrderDto orderDto = orderMapper.toDto(order);
         assertEquals(ID, orderDto.getId());
-        assertEquals(DATE, orderDto.getDate());
-        assertEquals(ACCEPTED, orderDto.getOrderState());
+        assertEquals(order.getDate().toLocaleString(), orderDto.getDate());
+        assertEquals(OrderState.ACCEPTED.getValue(), orderDto.getOrderState());
         assertEquals(PRICE, orderDto.getPrice());
         assertEquals(USERNAME, orderDto.getUsername());
         assertEquals(productDtoList, orderDto.getProducts());

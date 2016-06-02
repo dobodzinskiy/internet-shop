@@ -4,10 +4,10 @@ var { Image, Button } = require('react-bootstrap');
 var { Link } = require('react-router');
 
 const Phones = React.createClass({
-    render : function () {
+    render: function () {
         var {product} = this.props;
-        var isDualSim = (product.dualSim) == true ? 'Yes' : 'No' ;
-        return(
+        var isDualSim = (product.dualSim) == true ? 'Yes' : 'No';
+        return (
             <div>
                 <table className="table table-hover">
                     <tbody>
@@ -66,10 +66,10 @@ const Phones = React.createClass({
     }
 });
 const Laptops = React.createClass({
-    render : function () {
+    render: function () {
         var {product} = this.props;
-        var isKeyboardLight = (product.keyboardLight) == true ? 'Yes' : 'No' ;
-        return(
+        var isKeyboardLight = (product.keyboardLight) == true ? 'Yes' : 'No';
+        return (
             <div>
                 <table className="table table-hover">
                     <tbody>
@@ -120,9 +120,9 @@ const Laptops = React.createClass({
     }
 });
 const Computers = React.createClass({
-    render : function () {
+    render: function () {
         var {product} = this.props;
-        return(
+        return (
             <div>
                 <table className="table table-hover">
                     <tbody>
@@ -176,37 +176,71 @@ const Computers = React.createClass({
         )
     }
 });
-const  ProductPanel = React.createClass({
-    render : function () {
-        var product = this.props.product;
-        var photoUrl = "/resources/images/" + product.photo;
+const ProductPanel = React.createClass({
+    render: function () {
+        var { product } = this.props;
+        var { userState } = this.props;
+
+        var photo = "../resources/images/" + product.photo;
+        var Buy = <Button bsStyle="primary"
+                          onClick={(e) => { e.preventDefault(); this.props.toCart(product);}}>To cart</Button>;
+        if (!product.available) {
+            Buy = <Button bsStyle="primary" disabled> To cart </Button>;
+        }
+        var Favorite = null;
+        var Change = null;
+        if (userState.currentUser != null) {
+            if (userState.currentUserRole == "ROLE_ADMIN") {
+                Change = <Link className="btn btn-default" to={this.props.urlChange}> Change </Link>
+            }
+            var isFavorite = false;
+            userState.currentUser.products.forEach((favorite) => {
+                if (favorite.id == product.id) {
+                    isFavorite = true;
+                }
+            });
+            if (isFavorite) {
+                Favorite = <span className="glyphicon glyphicon-heart"
+                                 onClick={(e) => {e.preventDefault(); this.props.fromFavorites(product.id);}}>
+
+                </span>;
+            } else {
+                Favorite =
+                    <span className="glyphicon glyphicon-heart-empty"
+                          onClick={(e) => {e.preventDefault(); this.props.toFavorites(product.id);}}>
+                    </span>;
+            }
+        }
+
         var Component = Phones;
-        switch(product.type) {
-            case 'PHONES' :
+        switch (product.type) {
+            case 'phones' :
                 Component = Phones;
                 break;
-            case 'LAPTOPS':
+            case 'laptops':
                 Component = Laptops;
                 break;
-            case 'COMPUTERS':
+            case 'computers':
                 Component = Computers;
                 break;
             default :
                 break;
         }
-        return(
+        return (
             <div className="row">
-                <h2> {product.name} </h2>
+                <h2> {product.name} &nbsp;
+                    {Favorite}
+                </h2>
                 <div className="col-sm-8">
                     <div className="panel panel-default">
                         <div className="panel-heading">
                             Model : {product.model}
                         </div>
                         <div className="panel-body">
-                            <Image src={photoUrl} responsive />
+                            <Image src={photo} responsive/>
                             <br/>
-                            <Button bsStyle="primary" onClick={(e) => { e.preventDefault(); this.props.toCart(product);}}>Buy</Button> &nbsp;
-                            <Link className="btn btn-default" to={this.props.urlChange}> Change </Link> &nbsp;
+                            {Buy} &nbsp;
+                            {Change} &nbsp;
                             {product.price} UAH
                             <br/>
                             <br/>
@@ -227,56 +261,72 @@ const  ProductPanel = React.createClass({
 });
 
 const Comment = React.createClass({
-    handleSubmit : function() {
+    handleSubmit: function () {
         var commentId = this.props.comment.id;
         this.props.onDelete(commentId);
     },
-    render : function () {
+    render: function () {
         var {comment} = this.props;
+        var Delete = null;
+        if (this.props.userState.currentUserRole == "ROLE_ADMIN") {
+            Delete = <span className="glyphicon glyphicon glyphicon-remove" onClick={this.handleSubmit}></span>;
+        }
+        if (this.props.userState.currentUser != null) {
+            if (comment.username == this.props.userState.currentUser.login) {
+                Delete = <span className="glyphicon glyphicon glyphicon-remove" onClick={this.handleSubmit}></span>;
+            }
+        }
         return (
-            <div className="col-sm-10">
+            <div className="col-sm-12">
                 <h4>
                     {comment.username}
-                    <small> <button onClick={this.handleSubmit} className="btn btn-danger btn-sm">Remove</button> </small>
-                    <br />
-                    <br />
-                    <small> {comment.date} </small>
+                    <small className="pull-right"> {comment.date} {Delete}</small>
                 </h4>
                 <p> {comment.text} </p>
-                <h5> Rated: {comment.rate} <span className="glyphicon glyphicon-star" /> </h5>
+                <h5> Rated: {comment.rate} <span className="glyphicon glyphicon-star"/></h5>
                 <hr />
             </div>
         )
     }
 });
 const LeaveComment = React.createClass({
-
-    handleSubmit : function(e) {
+    isCommentValid(comment) {
+        if(comment < 2 || comment > 100) {
+            $("#comment-error").html("<br/><div class='alert alert-danger'>Comment should have 2-100 chars!</div>");
+            return false;
+        } else {
+            return true;
+        }
+    },
+    handleSubmit: function (e) {
         e.preventDefault();
-        var comment =  $("#comment");
+        var comment = $("#comment");
         var rate = $("#rate");
         var date = new Date();
         var productId = this.props.productId;
-
-        this.props.onSubmit({
-            "productId" : productId,
-            "text" : comment.val(),
-            "rate" : rate.val(),
-            "date" : date,
-            "username" : this.props.currentUser.login
-        });
-
-        comment.val('');
-
+        if (this.isCommentValid(comment.val())) {
+            this.props.onSubmit({
+                "productId": productId,
+                "text": comment.val(),
+                "rate": rate.val(),
+                "date": date,
+                "username": this.props.currentUser.login
+            });
+            comment.val('');
+        }
     },
-    render : function () {
-        return(
+    postCommentForm(currentUser) {
+        return currentUser ? (
             <div>
                 <hr />
-                <form role="form" onSubmit={this.handleSubmit}>
-                    <div className="form-group">
-                        <label for="comment">Comment:</label>
-                        <textarea type="email" className="form-control" id="comment" placeholder="Enter comment here"></textarea>
+                <form role="form" id="commentForm" onSubmit={this.handleSubmit}>
+                    <div className="form-group" id="comment-group">
+                        <label for="comment">Comment:
+                            <small id="comment-message"></small>
+                        </label>
+                        <textarea type="text" className="form-control"
+                                  id="comment" placeholder="Enter comment here"></textarea>
+                        <div id="comment-error"></div>
                     </div>
                     <div class="form-group">
                         <label for="rate">Rating :</label>
@@ -293,25 +343,40 @@ const LeaveComment = React.createClass({
                 </form>
                 <br />
             </div>
-        )
+        ) : (
+            <div>
+                <hr />
+                <h3>Log in or sign up to leave comments!</h3>
+            </div>
+        );
+    },
+
+    render: function () {
+        const { currentUser } = this.props;
+
+        return this.postCommentForm(currentUser);
     }
+
 });
 const CommentsPanel = React.createClass({
-    render : function() {
+    render: function () {
         var { comments } = this.props;
-        return(
+        var { userState } = this.props;
+        return (
             <div className="row">
                 <div className="col-sm-12">
                     <div className="panel panel-default">
                         <div className="panel-body">
-                            <LeaveComment currentUser={this.props.currentUser} onSubmit={this.props.onSubmit} productId={this.props.productId}/>
+                            <LeaveComment currentUser={userState.currentUser} onSubmit={this.props.onSubmit}
+                                          productId={this.props.productId}/>
                             <div id="comments">
                                 <p><span className="badge"> {comments.length} </span> Comments: </p>
                                 <br />
                                 {comments.map((comment) => {
-                                    return(
+                                    return (
                                         <Comment comment={comment}
                                                  key={comment.id}
+                                                 userState={this.props.userState}
                                                  onDelete={this.props.onDelete}/>
                                     )
                                 })}
@@ -324,18 +389,21 @@ const CommentsPanel = React.createClass({
     }
 });
 
-module.exports = function(props) {
+module.exports = function (props) {
     return (
-            <div className="container">
-                <ProductPanel product={props.product}
-                              toCart={props.toCart}
-                              key={props.product.id}
-                              urlChange={props.urlChange}/>
-                <CommentsPanel productId={props.product.id}
-                               comments={props.comments}
-                               onSubmit={props.onSubmit}
-                               onDelete={props.onDelete}
-                               currentUser={props.currentUser}/>
-            </div>
-        )
+        <div className="container">
+            <ProductPanel product={props.product}
+                          toCart={props.toCart}
+                          toFavorites={props.toFavorites}
+                          fromFavorites={props.fromFavorites}
+                          key={props.product.id}
+                          urlChange={props.urlChange}
+                          userState={props.userState}/>
+            <CommentsPanel productId={props.product.id}
+                           comments={props.comments}
+                           onSubmit={props.onSubmit}
+                           onDelete={props.onDelete}
+                           userState={props.userState}/>
+        </div>
+    )
 };

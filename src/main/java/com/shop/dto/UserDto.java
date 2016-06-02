@@ -1,32 +1,45 @@
 package com.shop.dto;
 
-
-import com.shop.entity.UserRoles;
 import org.hibernate.validator.constraints.NotEmpty;
 
 import javax.validation.constraints.Pattern;
 import java.util.List;
 import java.util.Set;
 
-
 public class UserDto {
+
     private int id;
+
     private String firstName;
+
     private String lastName;
+
     private String gender;
+
     @NotEmpty(message = "Please, your valid email")
     private String email;
+
     @NotEmpty(message = "Please, enter your password")
     private String password;
+
     @NotEmpty(message = "Please, enter your login")
     private String login;
+
+    @Pattern(regexp = "(^\\d{4}\\-(0?[1-9]|1[012])\\-(0?[1-9]|[12][0-9]|3[01])$)", message = "Date not valid!")
+    private String date;
+
     @NotEmpty(message = "Please, enter your phone")
     @Pattern(regexp = "(380+[0-9]{9})", message = "Not valid. Enter 380XXXXXXXXX")
     private String phone;
-    private Set<UserRoles> userRoles;
+
+    private Set<String> userRoles;
+
     private boolean enabled;
+
     private boolean staff;
+
     private List<OrderDto> orders;
+
     private List<ProductDto> products;
 
     public int getId() {
@@ -85,6 +98,14 @@ public class UserDto {
         this.login = login;
     }
 
+    public String getDate() {
+        return date;
+    }
+
+    public void setDate(String date) {
+        this.date = date;
+    }
+
     public String getPhone() {
         return phone;
     }
@@ -93,11 +114,11 @@ public class UserDto {
         this.phone = phone;
     }
 
-    public Set<UserRoles> getUserRoles() {
+    public Set<String> getUserRoles() {
         return userRoles;
     }
 
-    public void setUserRoles(Set<UserRoles> userRoles) {
+    public void setUserRoles(Set<String> userRoles) {
         this.userRoles = userRoles;
     }
 

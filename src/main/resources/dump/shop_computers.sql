@@ -37,7 +37,7 @@ CREATE TABLE `computers` (
 
 LOCK TABLES `computers` WRITE;
 /*!40000 ALTER TABLE `computers` DISABLE KEYS */;
-INSERT INTO `computers` VALUES (3,'Intel Z170','Zalman CNPS10X'),(8,'AMD Radeon R9 M390','Apple system');
+INSERT INTO `computers` VALUES (3,'Intel Z170','Zalman CNPS10X'),(8,'AMD Radeon R9 M390','Apple system'),(10,'AMD Radeon R9 M390','Apple system');
 /*!40000 ALTER TABLE `computers` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -50,4 +50,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-11 23:43:07
+-- Dump completed on 2016-06-02 17:55:25

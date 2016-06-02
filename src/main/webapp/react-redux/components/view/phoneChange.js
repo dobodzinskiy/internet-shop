@@ -47,6 +47,10 @@ const ProductChangePanel = React.createClass({
     render: function () {
         var product = this.props.product;
         var photoUrl = "/resources/images/" + product.photo;
+        var available = 'Available';
+        if (product.available) {
+            available = 'Unavailable';
+        }
         return (
             <div className="row">
                 <h2>
@@ -67,6 +71,10 @@ const ProductChangePanel = React.createClass({
                                 New photo
                             </Button> &nbsp;
                             <Button bsStyle="default" onClick={this.handleChangeProduct}>Save</Button> &nbsp;
+                            <Button bsStyle="default"
+                                    onClick={(e) => { e.preventDefault(); this.props.changeAvailable(product.id);}}>
+                                {available}
+                            </Button> &nbsp;
                             <div className="col-sm-4">
                                 <input className="form-control" type="text" id="price" defaultValue={product.price}
                                        placeholder="Product price"/>
@@ -151,7 +159,9 @@ const ProductChangePanel = React.createClass({
 module.exports = function (props) {
     return (
         <div className="container">
-            <ProductChangePanel urlProduct={props.urlProduct} product={props.product}
+            <ProductChangePanel urlProduct={props.urlProduct}
+                                product={props.product}
+                                changeAvailable={props.changeAvailable}
                                 changeProduct={props.changeProduct}/>
         </div>
     )

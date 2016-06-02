@@ -38,7 +38,7 @@ CREATE TABLE `user_products` (
 
 LOCK TABLES `user_products` WRITE;
 /*!40000 ALTER TABLE `user_products` DISABLE KEYS */;
-INSERT INTO `user_products` VALUES (27,13),(20,1),(20,4);
+INSERT INTO `user_products` VALUES (20,3),(20,8),(20,1),(20,5),(20,7),(24,8),(24,2),(24,7),(24,4);
 /*!40000 ALTER TABLE `user_products` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -51,4 +51,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2016-05-11 23:43:06
+-- Dump completed on 2016-06-02 17:55:25

@@ -4,11 +4,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "browserify -t [ babelify --presets [ react ] ] src/main/webapp/react-redux/index.js -o src/main/webapp/build/app.js",
+    "build:dev": "browserify --debug -t [ babelify --presets [ react ] ] src/main/webapp/react-redux/index.js -o src/main/webapp/build/app.js",
+    "build:prod": "browserify -t [ babelify --presets [ react ] ] src/main/webapp/react-redux/index.js -o src/main/webapp/build/app.js",
     "redux": "npm install --save redux react-redux react-router-redux",
     "redux-dev": "npm install --save-dev redux-devtools",
     "redux-thunk": "npm install --save redux-thunk",
-    "lodash": "npm install --save lodash"
+    "react-bootstrap-validation": "npm install --save react-bootstrap-validation"
   },
   "author": "",
   "license": "ISC",
@@ -17,9 +18,11 @@
     "babelify": "^7.2.0",
     "browserify": "^13.0.0",
     "jquery": "^2.2.3",
+    "jquery-form-validator": "^2.3.19",
     "lodash": "^4.11.2",
     "react": "^15.0.1",
     "react-bootstrap": "^0.29.1",
+    "react-bootstrap-validation": "^0.1.11",
     "react-dom": "^15.0.1",
     "react-redux": "^4.4.5",
     "react-router": "^2.3.0",

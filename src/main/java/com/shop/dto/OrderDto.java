@@ -1,17 +1,21 @@
 package com.shop.dto;
 
-import com.shop.entity.OrderState;
-
 import java.math.BigDecimal;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.List;
 
 public class OrderDto {
 
     private int id;
+
     private String username;
+
     private List<ProductDto> products = new ArrayList<>();
-    private Date date;
-    private OrderState orderState;
+
+    private String date;
+
+    private String orderState;
+
     private BigDecimal price = new BigDecimal(0);
 
     public int getId() {
@@ -38,19 +42,19 @@ public class OrderDto {
         this.products = products;
     }
 
-    public Date getDate() {
+    public String getDate() {
         return date;
     }
 
-    public void setDate(Date date) {
+    public void setDate(String date) {
         this.date = date;
     }
 
-    public OrderState getOrderState() {
+    public String getOrderState() {
         return orderState;
     }
 
-    public void setOrderState(OrderState orderState) {
+    public void setOrderState(String orderState) {
         this.orderState = orderState;
     }
 

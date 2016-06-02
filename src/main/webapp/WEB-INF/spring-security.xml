@@ -12,7 +12,7 @@
         <security:anonymous enabled="true" granted-authority="ROLE_GUEST" />
         <security:form-login login-processing-url="/j_spring_security_check"
                              password-parameter="j_password"
-                             username-parameter="J_username"
+                             username-parameter="j_username"
                              default-target-url="/" />
         <security:logout logout-success-url="/"
                          logout-url="/j_spring_security_logout" />

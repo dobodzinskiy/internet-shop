@@ -2,8 +2,8 @@ var React = require('react');
 var Redux = require('redux');
 var ReactRedux = require("react-redux");
 var { showCart, addInCart, subtractInCart, fromCart } = require('../../actions/cartActions');
-var { showLogin } = require('../../actions/userActions');
-var userApi = require('../../api/userApi');
+var { showLogin, showSignUp } = require('../../actions/profileActions');
+var profileApi = require('../../api/profileApi');
 var orderApi = require('../../api/orderApi');
 var NavPanel = require('../view/navPanel');
 
@@ -18,8 +18,11 @@ var NavigationPanel = React.createClass({
                           subtractInCart={this.props.subtractInCart}
                           fromCart={this.props.fromCart}
                           showLoginModal={this.props.showLogin}
-                          login={userApi.login}
-                          logout={userApi.logout}
+                          showSignUpModal={this.props.showSignUp}
+                          login={profileApi.login}
+                          signUp={profileApi.signUp}
+                          isLoginUnique={profileApi.isLoginUnique}
+                          logout={profileApi.logout}
                           confirmOrder={orderApi.confirmOrder} />
 
                 {this.props.children}
@@ -37,7 +40,8 @@ const mapStateToProps = function(store) {
     }
 };
 const mapDispatchToProps = (dispatch) => Redux.bindActionCreators({
-    showCart, addInCart, subtractInCart, fromCart, showLogin
+    showCart, addInCart, subtractInCart, fromCart,
+    showLogin, showSignUp
 }, dispatch);
 
 module.exports = ReactRedux.connect(mapStateToProps, mapDispatchToProps)(NavigationPanel);

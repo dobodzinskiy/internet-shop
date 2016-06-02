@@ -1,12 +1,14 @@
 var Redux = require('redux') ;
 var productReducer = require('./productReducer');
-var userReducer = require('./userReducer');
-var orderReducer = require('./orderReducer');
+var profileReducer = require('./profileReducer');
+var ordersReducer = require('./orderReducer');
 var cartReducer = require('./cartReducer');
+var clientsReducer = require('./clientsReducer');
 
 module.exports = Redux.combineReducers({
     productState : productReducer,
-    userState : userReducer,
-    orderState : orderReducer,
-    cartState : cartReducer
+    userState : profileReducer,
+    ordersState : ordersReducer,
+    cartState : cartReducer,
+    clientsState : clientsReducer
 });
